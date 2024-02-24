@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Minha cartela
+{% endblock %}
+
+{% block content %}
+<table>
+    <thead>
+        <th colspan="5">BINGO</th>
+    </thead>
+    <tbody>
+        {% for linha in cartela.cartela %}
+        <tr>
+            {% for num in linha %}
+            <td>{{num}}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

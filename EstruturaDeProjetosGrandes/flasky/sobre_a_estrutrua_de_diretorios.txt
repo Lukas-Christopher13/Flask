@@ -1,0 +1,12 @@
+Pastas
+
+--A aplicação flask vive na pasta /app
+--Os scrips da base de dados ficam na pasta /migrations
+--Testes na pasta /test
+--A venv fica lá
+
+Novos arquivos
+
+--requiriments.txt india a lista de dependencias do projeto
+--config.py armazenas as configurações
+--manage.py inicia aplicação e outras tarefas dela

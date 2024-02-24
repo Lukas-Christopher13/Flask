@@ -1,0 +1,174 @@
+openapi: 3.0.0
+info:
+  title: Banco Pix API
+  description: Api criada para um aplicativo de banco imobiliário
+  version: 1.0.0
+
+components: 
+  schemas:
+    banco:
+      type: object
+      properties: 
+        id:
+          type: integer
+          example: 1
+        username:
+          type: string
+          example: banco_username
+    
+    banco2:
+      type: object
+      properties: 
+        id:
+          type: integer
+          example: 2
+        username:
+          type: string
+          example: banco_username2
+    
+    banco3:
+      type: object
+      properties: 
+        id:
+          type: integer
+          example: 3
+        username:
+          type: string
+          example: banco_username3
+
+    bancoList:
+      type: object
+      properties:
+        bancos:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/banco'
+              - $ref: '#/components/schemas/banco2'
+              - $ref: '#/components/schemas/banco3'
+
+    createBancoPost:
+      type: object
+      properties:
+        username:
+          type: string
+          example: banco
+        password:
+          type: string
+          example: examplepasseord123
+        confirm password: 
+          type: string
+          example: examplepasseord123
+    
+    updateBanco:
+      type: object
+      properties:
+        username:
+          type: string
+          example: new username
+        new password:
+          type: string 
+          example: newpassword123
+        repeat password:
+          type: string
+          example: newpassword123
+
+paths:
+  /bancos:
+    get:
+      tags:
+        - Banco
+      summary: Return a list of 'banco' accounts
+      description: Return a json list of all accounts 'banco' accounts in api database
+      security:
+        - autorizationToken: [] 
+      responses:
+        200:
+          description: A json list of bancos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bancoList' 
+    post:
+      tags:
+        - Banco
+      summary: Create a new 'banco' account
+      description: Create a new 'banco' account
+      security:
+          - autorizationToken: [] 
+      requestBody:
+        content: 
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createBancoPost'
+      responses:
+        200:
+          description: New 'banco' account was created!
+        409:
+          description: Can't create a new user because the current user has been registered
+  
+  /bancos/{id}:
+    get:
+      tags:
+        - Banco
+      summary: Get a 'banco' by passing an id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: A valid id
+      security:
+        - autorizationToken: []
+      responses:
+        200:
+          description: Return the 'banco' user data of the id passed
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/banco'
+        404:
+          description: Invalid id. User not found!
+
+    put:
+      tags:
+        - Banco
+      summary: Update a 'banco' account
+      security:
+        - autorizationToken: []
+      parameters:
+        - name: id
+          in: path
+          description: ID of pet to return
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updateBanco'
+      responses:
+        200:
+          description: The 'banco' data has updated
+        404:
+          description: banco not found
+    
+    delete:
+      tags:
+        - Banco
+      summary: Delete a 'banco' account
+      security:
+        - autorizationToken: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: The banco has deleted
+        404:
+          description: banco not found

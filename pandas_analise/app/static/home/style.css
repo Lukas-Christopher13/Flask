@@ -1,0 +1,128 @@
+:root {
+    --nav-bar-color: #1e4331;
+    --nav-bar-item-text-color: #ffffff;
+    --nav-bar-item-hover-color: #e2e2e2;
+    --nav-bar-form-button-hover-color: #206443;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    border: none;
+    text-decoration: none;
+}
+
+.nav-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--nav-bar-color);
+    position: fixed;  
+    width: 100vw;
+}
+
+.pandas-logo {
+    width: 20%;
+    height: auto;
+}
+
+.nav-itens {
+    display: flex;
+    padding-right: 50px;
+    list-style-type: none;
+}
+
+.nav-item {
+    padding: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: large;
+}
+
+.nav-item a {
+    color: var(--nav-bar-item-text-color)
+}
+
+.nav-item a:hover {
+    color: var(--nav-bar-item-hover-color)
+}
+
+.upload-file {
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.upload {
+    font-size: 15px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.upload::file-selector-button {
+    background: var(--nav-bar-color);
+    border: none;
+    color: var(--nav-bar-item-text-color);
+    padding: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.submit {
+    width: 100px;
+    border: none;
+    padding: 5px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 15px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--nav-bar-item-text-color);
+    background-color: var(--nav-bar-color);
+}
+
+.submit:hover, .upload::file-selector-button:hover {
+    color: var(--nav-bar-item-hover-color);
+    background-color: var(--nav-bar-form-button-hover-color);
+}
+
+.flash-message {
+    color: red;
+    font-size: 15;
+    font-weight: bold;
+    list-style-type: none;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.file-table {
+    border: solid 1px black;
+    border-collapse: collapse;
+    letter-spacing: 1px;
+}
+
+thead th {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    color: var(--nav-bar-item-text-color);
+    background-color: var(--nav-bar-color)
+}
+
+th, td {
+    padding-right: 8px ;
+    padding-left: 10px;
+    padding-bottom: 2px;
+    font-size: 20;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+tbody > tr:nth-of-type(even) {
+    background-color: rgb(237 238 242);
+}

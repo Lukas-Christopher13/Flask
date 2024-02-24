@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %} {{ file.filename }} {% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='home/file.css') }}">
+{% endblock %}
+
+{% block content %}
+    <main>
+        <table>
+            <thead>
+                <tr>
+                    {% for column in file.get_columns() %}
+                        <th> {{ column }} </th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for array in file.get_table() %}
+                    <tr>
+                        {% for item in array %}
+                            <th> {{ item }} </th>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </main>
+   
+{% endblock %}
+

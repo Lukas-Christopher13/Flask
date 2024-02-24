@@ -1,0 +1,149 @@
+openapi: 3.0.0
+info:
+  title: Banco Pix API
+  description: Api criada para um aplicativo de banco imobiliário
+  version: 1.0.0
+servers:
+- url: /
+paths:
+  /auth/banco-login:
+    post:
+      tags:
+      - auth
+      summary: Permite logar como "Banco"
+      description: O usuário insere um 'username' e um 'password' valida e recebe
+        um token de autorização e outro de refresh.
+      operationId: auth_banco_login_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/auth_bancologin_body'
+      responses:
+        "200":
+          description: O login é realizado e são retornados os tokens de acesso e
+            de refresh
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success_Login'
+        "401":
+          description: Invalid username or password. O Erro pode ser causado por 'username'
+            ou 'password' invalido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invalid_Username'
+      x-openapi-router-controller: swagger_server.controllers.auth_controller
+  /auth/sala-code:
+    post:
+      tags:
+      - auth
+      summary: Verifica se uma sala existe e retorna o seu codigo
+      description: "Verifica se uma sala existe e se sim, retorna um json com o codigo\
+        \ da sala"
+      operationId: auth_sala_code_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/auth_salacode_body'
+      responses:
+        "200":
+          description: "A sala existe, retorna um json com o codigo da sala"
+        "401":
+          description: "A sala não existe, retorna json com uma mensagem de erro."
+      x-openapi-router-controller: swagger_server.controllers.auth_controller
+  /auth/create-player/{code}:
+    post:
+      tags:
+      - auth
+      summary: Cria um player
+      operationId: auth_create_player_code_post
+      parameters:
+      - name: code
+        in: path
+        description: O codigo da sala em que o usuário vai pertencer
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createplayer_code_body'
+      responses:
+        "200":
+          description: Usuaria foi criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success_Login'
+        "401":
+          description: A sala não existe
+      x-openapi-router-controller: swagger_server.controllers.auth_controller
+  /auth/refresh:
+    post:
+      tags:
+      - auth
+      summary: Recebe um 'refresh_token' e retorna um token atualizado
+      operationId: auth_refresh_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Refresh_token'
+      responses:
+        "200":
+          description: Retorna um token valido
+      x-openapi-router-controller: swagger_server.controllers.auth_controller
+components:
+  schemas:
+    Success_Login:
+      type: object
+      properties:
+        access_token:
+          type: string
+          example: valid access token
+        refresh_token:
+          type: string
+          example: valid refresh token
+      example:
+        access_token: valid access token
+        refresh_token: valid refresh token
+    Invalid_Username:
+      type: object
+      properties:
+        msg:
+          type: string
+          example: invalid username or password
+    Refresh_token:
+      type: object
+      properties:
+        refresh_token:
+          type: string
+          example: refresh token
+    auth_bancologin_body:
+      type: object
+      properties:
+        username:
+          type: string
+          example: lukas
+        password:
+          type: string
+          example: "123"
+    auth_salacode_body:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "1234"
+    createplayer_code_body:
+      type: object
+      properties:
+        username:
+          type: string
+          example: fulano
+

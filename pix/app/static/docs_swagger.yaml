@@ -1,0 +1,283 @@
+openapi: 3.0.0
+info:
+  title: Banco Pix API
+  description: Api criada para um aplicativo de banco imobiliário
+  version: 1.0.0
+
+components: 
+  schemas:
+    banco:
+      type: object
+      properties: 
+        id:
+          type: integer
+          example: 1
+        username:
+          type: string
+          example: banco_username
+    
+    banco2:
+      type: object
+      properties: 
+        id:
+          type: integer
+          example: 2
+        username:
+          type: string
+          example: banco_username2
+    
+    banco3:
+      type: object
+      properties: 
+        id:
+          type: integer
+          example: 3
+        username:
+          type: string
+          example: banco_username3
+
+    bancoList:
+      type: object
+      properties:
+        bancos:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/banco'
+              - $ref: '#/components/schemas/banco2'
+              - $ref: '#/components/schemas/banco3'
+
+    createBancoPost:
+      type: object
+      properties:
+        username:
+          type: string
+          example: banco
+        password:
+          type: string
+          example: examplepasseord123
+        confirm password: 
+          type: string
+          example: examplepasseord123
+    
+    updateBanco:
+      type: object
+      properties:
+        username:
+          type: string
+          example: new username
+        new password:
+          type: string 
+          example: newpassword123
+        repeat password:
+          type: string
+          example: newpassword123
+
+    Success_Login:
+      type: object
+      properties: 
+        access_token:
+          type: string
+          example: valid access token
+        refresh_token:
+          type: string
+          example: valid refresh token
+    
+    Invalid_Username:
+      type: object
+      properties: 
+        msg:
+          type: string
+          example: invalid username or password
+    Refresh_token:
+      type: object
+      properties:
+        refresh_token:
+          type: string
+          example: refresh token
+
+  securitySchemes:
+    autorizationToken:            
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
+  
+paths:
+  /bancos:
+    get:
+      tags:
+        - Banco
+      summary: Return a list of 'banco' accounts
+      description: Return a json list of all accounts 'banco' accounts in api database
+      security:
+        - autorizationToken: [] 
+      responses:
+        200:
+          description: A json list of bancos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bancoList' 
+    post:
+      tags:
+        - Banco
+      summary: Create a new 'banco' account
+      description: Create a new 'banco' account
+      security:
+          - autorizationToken: [] 
+      requestBody:
+        content: 
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createBancoPost'
+      responses:
+        200:
+          description: New 'banco' account was created!
+        409:
+          description: Can't create a new user because the current user has been registered
+  
+  /bancos/{id}:
+    get:
+      tags:
+        - Banco
+      summary: Get a 'banco' by passing an id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: A valid id
+      security:
+        - autorizationToken: []
+      responses:
+        200:
+          description: Return the 'banco' user data of the id passed
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/banco'
+        404:
+          description: Invalid id. User not found!
+
+    put:
+      tags:
+        - Banco
+      summary: Update a 'banco' account
+      security:
+        - autorizationToken: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updateBanco'
+         
+      responses:
+        200:
+          description:
+    
+    delete:
+      tags:
+        - Banco
+      responses:
+        200:
+          description:
+
+  /auth/banco-login:
+    post:
+      tags:
+        - auth
+      summary: Permite logar como "Banco"
+      description: O usuário insere um 'username' e um 'password' valida e recebe um token de autorização e outro de refresh.
+      requestBody: 
+        content: 
+          application/json: 
+            schema:
+              type: object 
+              properties:
+                username:
+                  type: string
+                  example: lukas
+                password:
+                  type: string
+                  example: 123
+      responses:
+        200:
+          description: O login é realizado e são retornados os tokens de acesso e de refresh
+          content: 
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Success_Login' 
+        401:
+          description: Invalid username or password. O Erro pode ser causado por 'username' ou 'password' invalido
+          content: 
+            application/json: 
+              schema: 
+                $ref: '#/components/schemas/Invalid_Username'
+
+  /auth/sala-code:
+    post:
+      tags:
+        - auth
+      summary: Verifica se uma sala existe e retorna o seu codigo
+      description: Verifica se uma sala existe e se sim, retorna um json com o codigo da sala
+      requestBody:
+        content:
+          application/json: 
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  example: 1234
+      responses:
+        200:
+          description: A sala existe, retorna um json com o codigo da sala
+        401:
+          description: A sala não existe, retorna json com uma mensagem de erro.
+
+  /auth/create-player/{code}:
+    post:
+      tags:
+        - auth
+      summary: Cria um player
+      parameters:
+        - name: code
+          in: path
+          required: true
+          description: O codigo da sala em que o usuário vai pertencer
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json: 
+            schema: 
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: fulano
+
+      responses:
+        200:
+          description: Usuaria foi criado com sucesso
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Success_Login'
+        401:
+          description: A sala não existe
+
+  /auth/refresh:
+    post:
+      tags:
+        - auth
+      summary: Recebe um 'refresh_token' e retorna um token atualizado
+      requestBody:
+        content:
+          application/json: 
+            schema:
+              $ref: '#/components/schemas/Refresh_token' 
+      responses:
+        200:
+          description: Retorna um token validor

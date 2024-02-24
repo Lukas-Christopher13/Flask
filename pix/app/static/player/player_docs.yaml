@@ -1,0 +1,72 @@
+openapi: 3.0.0
+info:
+  title: Banco Pix API
+  description: Api criada para um aplicativo de banco imobiliário
+  version: 1.0.0
+
+components:
+  schemas:
+    player1:
+      type: object
+      properties:
+        username:
+          type: string
+          example: player_1
+        money:
+          type: integer
+          example: 120000
+        sala code:
+          type: string
+          example: 1234
+      
+    player2:
+      type: object
+      properties:
+        username:
+          type: string
+          example: player_2
+        money:
+          type: integer
+          example: 20000
+        sala code:
+          type: string
+          example: 1234
+    
+    player3:
+      type: object
+      properties:
+        username:
+          type: string
+          example: player_3
+        money:
+          type: integer
+          example: 10000
+        sala code:
+          type: string
+          example: 1213
+
+    playerList:
+      type: object
+      properties:
+        players:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/player1'
+              - $ref: '#/components/schemas/player2'
+              - $ref: '#/components/schemas/player3'
+paths:
+  /players:
+    get:
+      tags:
+        - Player
+      summary: Get a list of all players
+      security:
+        - autorizationToken: []
+      responses:
+        200:
+          description: A json list of players
+          content:
+            applictaion/json:
+              schema:
+                $ref: '#/components/schemas/playerList'

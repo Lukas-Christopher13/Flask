@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  flaks_rinha:
+    build: 
+      context: .
+    ports:
+      - 5000:5000
+    depends_on:
+      - postgres
+     
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=lukas
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
+      - postgresVolume:/var/lib/postgres
+      - postgresConfig:/etc/postgres
+      
+volumes:
+  postgresVolume:
+  postgresConfig:
+
+  
+
+
+

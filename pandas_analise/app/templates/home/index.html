@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title%} Web pandas {% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='home/style.css') }}">
+{% endblock %}
+
+{% block nav %}
+    <nav class="nav-bar">
+        <img class="pandas-logo" src="{{ url_for('static', filename='home/images/Pandas_logo.png') }}" alt="Pandas logo">
+        <ul class="nav-itens">
+            <li class="nav-item"><a href="/">Home</a></li>
+            <li class="nav-item"><a href="">Git Hub</a></li>
+            <li class="nav-item"><a href="">About</a></li>
+        </ul>
+    </nav>
+{% endblock %}
+
+
+{% block content %}
+    <div class="upload-file">
+        <form class="form" method="post" enctype="multipart/form-data" >
+            <input class="upload" type="file" name="file">
+            <button class="submit" type="submit">Upload File</button>
+        </form>
+        
+        {% with messages = get_flashed_messages() %}
+        <ul class="flash-message">
+            {% if messages %}
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+            {% endif %}
+        </ul>
+        {% endwith %}
+
+        <table class="file-table">
+            <thead>
+                <tr>
+                    <th>File Name</th>
+                    <th>Upload Date</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for filename in filenames %}
+               <tr>
+                    <td class="td-first"><a href="{{ url_for('home.file', file_id=filename[0]) }}">{{ filename[1] }}</a></td>
+                    <td class="td-second">{{ filename[2]}}</td>
+               </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

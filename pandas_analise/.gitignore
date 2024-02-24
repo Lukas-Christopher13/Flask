@@ -1,0 +1,13 @@
+#my gitignore
+.vscode/
+__pycache__/
+.pytest_cache
+arquivos_csv_test/
+instance/
+
+#ignore my py venv
+.venv/
+
+#ignore all csv files in app/files
+app/files/*.csv
+
